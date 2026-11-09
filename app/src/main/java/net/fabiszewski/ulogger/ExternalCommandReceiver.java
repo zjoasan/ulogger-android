@@ -31,6 +31,10 @@ public class ExternalCommandReceiver extends BroadcastReceiver {
     private static final String START_NEW_LOGGER = "start new logger";
     private static final String STOP_LOGGER = "stop logger";
     private static final String START_UPLOAD = "start upload";
+    private static final String GET_TRACK_ID = "get track id";
+
+    public static final String BROADCAST_TRACK_ID = BuildConfig.APPLICATION_ID + ".broadcast.track_id";
+    public static final String EXTRA_TRACK_ID = "trackId";
 
     @Override
     public void onReceive(@NonNull Context context, @Nullable Intent intent) {
@@ -48,6 +52,7 @@ public class ExternalCommandReceiver extends BroadcastReceiver {
                     case START_NEW_LOGGER -> startNewLoggerService(context, overwrite);
                     case STOP_LOGGER -> stopLogger(context);
                     case START_UPLOAD -> uploadData(context);
+                    case GET_TRACK_ID -> sendTrackId(context);
                 }
             }
         }
@@ -93,5 +98,16 @@ public class ExternalCommandReceiver extends BroadcastReceiver {
             Intent intent = new Intent(context, WebSyncService.class);
             ContextCompat.startForegroundService(context, intent);
         }
+    }
+
+    /**
+    * Send current track id via broadcast
+    * @param context Context
+    */
+    private void sendTrackId(@NonNull Context context) {
+        int trackId = DbAccess.getTrackId(context);
+        Intent intent = new Intent(BROADCAST_TRACK_ID);
+        intent.putExtra(EXTRA_TRACK_ID, trackId);
+        context.sendBroadcast(intent);
     }
 }
