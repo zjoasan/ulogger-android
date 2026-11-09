@@ -214,10 +214,6 @@ public class WebHelper {
             do {
                 retry = false;
                 connection = (HttpURLConnection) url.openConnection();
-                if (url.getUserInfo() != null) {
-                    String basicAuth = "Basic " + new String(new Base64().encode(url.getUserInfo().getBytes()));
-                    connection.setRequestProperty("Authorization", basicAuth);
-                }
                 connection.setDoOutput(true);
                 connection.setRequestMethod("POST");
                 connection.setRequestProperty("User-Agent", userAgent);
