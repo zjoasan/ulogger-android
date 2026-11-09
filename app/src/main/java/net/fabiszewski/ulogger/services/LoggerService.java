@@ -115,7 +115,10 @@ public class LoggerService extends Service {
             } else if (errorCode == E_PERMISSION) {
                 BroadcastHelper.sendBroadcast(this, BROADCAST_LOCATION_PERMISSION_DENIED);
             }
+        } catch (IllegalArgumentException ie) {
+                BroadcastHelper.sendBroadcast(this, BROADCAST_LOCATION_DISABLED);
         }
+
         return false;
     }
 
